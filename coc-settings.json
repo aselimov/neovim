@@ -2,6 +2,9 @@
     "suggest.autoTrigger": "none", 
     "suggest.timeout": 500,
     "pyright.disableDocumentation":false,
+    "python.analysis.diagnosticSeverityOverrides":{
+        "reportUnboundVariable":"none"
+    },
     "hover.target": "preview"
 }
 
