@@ -1,0 +1,8 @@
+set spell spelllang=en_us
+map <C-b> : w % <Bar> ! md2pdf % <CR>
+map <A-b> : w % <Bar> ! md2docx %  <CR>
+map <C-z> : !zathura %:r.pdf & <CR>
+inoremap ;i ** <++><Esc>5hi
+inoremap ;b **** <++><Esc>6hi
+inoremap ;I ![](<++>)<Esc>6hi
+inoremap ;c ```<CR>```<Esc>Oi

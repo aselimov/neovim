@@ -1,0 +1,7 @@
+{
+    "suggest.autoTrigger": "none", 
+    "suggest.timeout": 500,
+    "pyright.disableDocumentation":false,
+    "hover.target": "preview"
+}
+
