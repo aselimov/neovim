@@ -5,6 +5,7 @@
     "python.analysis.diagnosticSeverityOverrides":{
         "reportUnboundVariable":"none"
     },
-    "hover.target": "preview"
+    "hover.target": "preview",
+    "clangd.path": "~/.config/coc/extensions/coc-clangd-data/install/16.0.2/clangd_16.0.2/bin/clangd"
 }
 

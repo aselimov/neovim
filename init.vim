@@ -188,3 +188,4 @@ nnoremap <C-H> <C-W><C-H>
 
 "iron.nvim
 lua require('iron')
+set formatoptions-=o
