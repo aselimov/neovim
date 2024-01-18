@@ -10,12 +10,10 @@ Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'kien/ctrlp.vim'
 Plug 'morhetz/gruvbox'
-"Plug 'rhysd/vim-grammarous'
 Plug 'skywind3000/asyncrun.vim'
 Plug 'norcalli/nvim-colorizer.lua'
 Plug 'nvim-lua/popup.nvim'
 Plug 'nvim-lua/plenary.nvim'
-Plug 'nvim-telescope/telescope.nvim'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'GCBallesteros/vim-textobj-hydrogen'
@@ -170,9 +168,9 @@ set termguicolors
 lua require'colorizer'.setup()
 
 "Set up telescope 
-noremap <silent> <C-f> <cmd>Telescope live_grep<cr>
-lua require('telescope_settings')
-
+"noremap <silent> <C-f> <cmd>Telescope live_grep<cr>
+"lua require('telescope_settings')
+"
 "Neomutt settings
 autocmd BufNewFile,BufRead /tmp/neomutt* set noautoindent filetype=mail wm=0 tw=0 nonumber nolist
 autocmd BufNewFile,BufRead ~/tmp/neomutt* set noautoindent filetype=mail wm=0 tw=0 nonumber  nolist
