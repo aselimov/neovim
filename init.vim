@@ -14,6 +14,7 @@ Plug 'skywind3000/asyncrun.vim'
 Plug 'norcalli/nvim-colorizer.lua'
 Plug 'nvim-lua/popup.nvim'
 Plug 'nvim-lua/plenary.nvim'
+Plug 'nvim-telescope/telescope.nvim'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'GCBallesteros/vim-textobj-hydrogen'
@@ -168,8 +169,8 @@ set termguicolors
 lua require'colorizer'.setup()
 
 "Set up telescope 
-"noremap <silent> <C-f> <cmd>Telescope live_grep<cr>
-"lua require('telescope_settings')
+nnoremap <silent> <C-g> <cmd>Telescope live_grep<cr>
+nnoremap <silent> <C-f> <cmd> Telescope find_files
 "
 "Neomutt settings
 autocmd BufNewFile,BufRead /tmp/neomutt* set noautoindent filetype=mail wm=0 tw=0 nonumber nolist
