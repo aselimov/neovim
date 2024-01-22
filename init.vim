@@ -170,7 +170,7 @@ lua require'colorizer'.setup()
 
 "Set up telescope 
 nnoremap <silent> <C-g> <cmd>Telescope live_grep<cr>
-nnoremap <silent> <C-f> <cmd> Telescope find_files
+nnoremap <silent> <C-f> <cmd> Telescope find_files<cr>
 "
 "Neomutt settings
 autocmd BufNewFile,BufRead /tmp/neomutt* set noautoindent filetype=mail wm=0 tw=0 nonumber nolist
