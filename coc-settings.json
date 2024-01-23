@@ -6,6 +6,10 @@
         "reportUnboundVariable":"none"
     },
     "hover.target": "preview",
-    "clangd.path": "/usr/bin/clangd"
+    "clangd.path": "/usr/bin/clangd",
+    "python.formatting.provider": "black",
+    "python.formatting.blackPath": "/home/aselimov/.local/bin/black",
+    "python.formatting.blackArgs": ["-l","100"],
+    "coc.preferences.formatOnSaveFiletypes": ["python"]
 }
 
