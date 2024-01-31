@@ -8,7 +8,7 @@ Plug 'Vigemus/iron.nvim'
 Plug 'tpope/vim-markdown'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
-Plug 'kien/ctrlp.vim'
+"Plug 'kien/ctrlp.vim'
 Plug 'morhetz/gruvbox'
 Plug 'skywind3000/asyncrun.vim'
 Plug 'norcalli/nvim-colorizer.lua'
@@ -169,8 +169,9 @@ set termguicolors
 lua require'colorizer'.setup()
 
 "Set up telescope 
+lua require('telescope_settings')
 nnoremap <silent> <C-g> <cmd>Telescope live_grep<cr>
-nnoremap <silent> <C-f> <cmd> Telescope find_files<cr>
+nnoremap <silent> <C-f> <cmd> Telescope find_files shorten_path=true<cr>
 "
 "Neomutt settings
 autocmd BufNewFile,BufRead /tmp/neomutt* set noautoindent filetype=mail wm=0 tw=0 nonumber nolist
