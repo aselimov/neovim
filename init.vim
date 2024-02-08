@@ -18,6 +18,10 @@ Plug 'nvim-telescope/telescope.nvim'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'GCBallesteros/vim-textobj-hydrogen'
+Plug 'nvim-telescope/telescope-live-grep-args.nvim'
+Plug 'folke/todo-comments.nvim'
+
+
 
 " List ends here. Plugins become visible to Vim after this call.
 call plug#end()
@@ -106,8 +110,6 @@ filetype plugin on
 let g:vim_markdown_folding_disabled = 1
 
 "Keybindings 
-inoremap <Space><Space> <Esc>/<++><Enter>"_c4l
-"map <C-f> :NERDTreeToggle<CR>
 map <C-s> :set spell spellfile=~/.config/nvim/spell/wordlist.utf-8.spl
 
 "Set up some Asyncrun commands
@@ -170,8 +172,12 @@ lua require'colorizer'.setup()
 
 "Set up telescope 
 lua require('telescope_settings')
-nnoremap <silent> <C-g> <cmd>Telescope live_grep<cr>
-nnoremap <silent> <C-f> <cmd> Telescope find_files shorten_path=true<cr>
+nnoremap <silent> <C-g> <cmd>lua require('telescope').extensions.live_grep_args.live_grep_args(require('telescope.themes').get_ivy({}))<cr>
+xnoremap <silent> <C-g> "zy:lua require('telescope').extensions.live_grep_args.live_grep_args(require('telescope.themes').get_ivy({}))<cr><c-r>z
+nnoremap <silent> <C-f> <cmd> Telescope find_files shorten_path=true theme=ivy<cr>
+nnoremap <silent> <A-g> <cmd> Telescope live_grep grep_open_files=true theme=ivy <cr>
+vnoremap <silent> <A-g> "zy:Telescope live_grep grep_open_files=true theme=ivy <cr><c-r>z
+" Change an option theme=ivy<cr>
 "
 "Neomutt settings
 autocmd BufNewFile,BufRead /tmp/neomutt* set noautoindent filetype=mail wm=0 tw=0 nonumber nolist
@@ -189,3 +195,6 @@ nnoremap <C-H> <C-W><C-H>
 "iron.nvim
 lua require('iron')
 set formatoptions-=o
+
+"todo-comments
+lua require("todo-comments").setup()

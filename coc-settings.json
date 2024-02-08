@@ -2,14 +2,17 @@
     "suggest.autoTrigger": "none", 
     "suggest.timeout": 500,
     "pyright.disableDocumentation":false,
+    "pyright.inlayHints.variableTypes":false,
+    "pyright.inlayHints.parameterTypes":false,
+    "pyright.inlayHints.functionReturnTypes":false,
     "python.analysis.diagnosticSeverityOverrides":{
         "reportUnboundVariable":"none"
     },
     "hover.target": "preview",
     "clangd.path": "/usr/bin/clangd",
     "python.formatting.provider": "black",
-    "python.formatting.blackPath": "/home/aselimov/.local/bin/black",
     "python.formatting.blackArgs": ["-l","100"],
-    "coc.preferences.formatOnSaveFiletypes": ["python"]
+    "coc.preferences.formatOnSaveFiletypes": ["python"],
+    "java.inlayHints.parameterNames.enabled": "none"
 }
 

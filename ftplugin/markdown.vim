@@ -1,3 +1,4 @@
+inoremap <Space><Space> <Esc>/<++><Enter>"_c4l
 set spell spellfile="~/.config/nvim/spell/wordlist"
 let g:markdown_fenced_languages = ['html', 'python', 'bash=sh', 'fortran']
 "set conceallevel=2
