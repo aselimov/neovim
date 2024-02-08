@@ -20,8 +20,7 @@ Plug 'christoomey/vim-tmux-navigator'
 Plug 'GCBallesteros/vim-textobj-hydrogen'
 Plug 'nvim-telescope/telescope-live-grep-args.nvim'
 Plug 'folke/todo-comments.nvim'
-
-
+Plug 'rust-lang/rust'
 
 " List ends here. Plugins become visible to Vim after this call.
 call plug#end()
@@ -198,3 +197,6 @@ set formatoptions-=o
 
 "todo-comments
 lua require("todo-comments").setup()
+"Default width for everything nonw
+set colorcolumn=100
+set tw=100
