@@ -1,2 +1,2 @@
-set colorcolumn=100
-set tw=100
+set colorcolumn=120
+set tw=120
