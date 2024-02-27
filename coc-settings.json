@@ -12,8 +12,15 @@
     "clangd.path": "/usr/bin/clangd",
     "python.formatting.provider": "black",
     "python.formatting.blackArgs": ["-l","100"],
-    "coc.preferences.formatOnSaveFiletypes": ["python", "java", "rust"],
+    "coc.preferences.formatOnSaveFiletypes": ["python","java", "rust"],
     "java.inlayHints.parameterNames.enabled": "none",
-    "java.format.settings.url": "/home/alex.selimov/RedTop.xml"
+    "java.format.settings.url": "/home/alex.selimov/RedTop.xml",
+    "workspace.ignoredFolders": [
+        "$HOME",
+        "$HOME/.cargo/**",
+        "$HOME/.rustup/**"
+    ],
+    "rust-analyzer.inlayHints.typeHints.enable": false,
+    "rust-analyzer.inlayHints.parameterHints.enable": false
 }
 

@@ -17,4 +17,6 @@ inoremap ;pc  ```<CR>```<Esc>O
 inoremap ;cu - [ ]
 inoremap ;cc - [x]
 
+set tw=200
+set colorcolumn=
 

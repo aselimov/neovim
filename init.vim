@@ -20,7 +20,8 @@ Plug 'christoomey/vim-tmux-navigator'
 Plug 'GCBallesteros/vim-textobj-hydrogen'
 Plug 'nvim-telescope/telescope-live-grep-args.nvim'
 Plug 'folke/todo-comments.nvim'
-Plug 'rust-lang/rust'
+Plug 'windwp/nvim-autopairs'
+Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 
 " List ends here. Plugins become visible to Vim after this call.
 call plug#end()
@@ -178,6 +179,9 @@ nnoremap <silent> <A-g> <cmd> Telescope live_grep grep_open_files=true theme=ivy
 vnoremap <silent> <A-g> "zy:Telescope live_grep grep_open_files=true theme=ivy <cr><c-r>z
 " Change an option theme=ivy<cr>
 "
+"Some coc.nvim bindings
+nnoremap <silent> gd <cmd>call CocActionAsync('jumpDefinition')<cr>
+
 "Neomutt settings
 autocmd BufNewFile,BufRead /tmp/neomutt* set noautoindent filetype=mail wm=0 tw=0 nonumber nolist
 autocmd BufNewFile,BufRead ~/tmp/neomutt* set noautoindent filetype=mail wm=0 tw=0 nonumber  nolist
@@ -195,8 +199,14 @@ nnoremap <C-H> <C-W><C-H>
 lua require('iron')
 set formatoptions-=o
 
+"autopair settings
+lua require('autopair')
+
 "todo-comments
 lua require("todo-comments").setup()
 "Default width for everything nonw
 set colorcolumn=100
 set tw=100
+
+"Some jumping
+inoremap ;<Space><Space> <Esc>/<++><Enter>"_c4l
