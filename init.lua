@@ -49,7 +49,15 @@ vim.opt.ts = 4
 vim.opt.expandtab = true
 vim.opt.tw = 100
 vim.opt.colorcolumn = "+1"
+vim.opt.pumheight = 5
 
+-- Disable semantic tokens
+vim.api.nvim_create_autocmd("LspAttach", {
+	callback = function(args)
+		local client = vim.lsp.get_client_by_id(args.data.client_id)
+		client.server_capabilities.semanticTokensProvider = nil
+	end,
+})
 -- [[ Basic Keymaps ]]
 --  See `:help vim.keymap.set()`
 
@@ -73,8 +81,26 @@ vim.keymap.set("n", "<C-j>", "<C-w><C-j>", { desc = "Move focus to the lower win
 vim.keymap.set("n", "<C-k>", "<C-w><C-k>", { desc = "Move focus to the upper window" })
 
 -- [[ Basic Autocommands ]]
---  See :help lua-guide-autocommands
-
+--  Go back to last edited line when reopening file
+vim.api.nvim_create_autocmd("BufRead", {
+	callback = function(opts)
+		vim.api.nvim_create_autocmd("BufWinEnter", {
+			once = true,
+			buffer = opts.buf,
+			callback = function()
+				local ft = vim.bo[opts.buf].filetype
+				local last_known_line = vim.api.nvim_buf_get_mark(opts.buf, '"')[1]
+				if
+					not (ft:match("commit") and ft:match("rebase"))
+					and last_known_line > 1
+					and last_known_line <= vim.api.nvim_buf_line_count(opts.buf)
+				then
+					vim.api.nvim_feedkeys([[g`"]], "nx", false)
+				end
+			end,
+		})
+	end,
+})
 -- [[ Install `lazy.nvim` plugin manager ]]
 --    See `:help lazy.nvim.txt` or https://github.com/folke/lazy.nvim for more info
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
@@ -158,6 +184,7 @@ require("lazy").setup({
 	},
 	"kana/vim-textobj-user",
 	"godlygeek/tabular",
+	"tpope/vim-sleuth",
 	{
 		"Vigemus/iron.nvim",
 		config = function()
@@ -375,7 +402,12 @@ require("lazy").setup({
 			--  - settings (table): Override the default settings passed when initializing the server.
 			--        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
 			local servers = {
-				clangd = {},
+				clangd = {
+					filetypes = {
+						"c",
+						"cpp",
+					},
+				},
 				-- gopls = {},
 				jdtls = {},
 				pyright = {},
@@ -570,7 +602,7 @@ require("lazy").setup({
 				ensure_installed = { "bash", "c", "html", "lua", "markdown", "vim", "vimdoc" },
 				-- Autoinstall languages that are not installed
 				auto_install = true,
-				highlight = { enable = true },
+				highlight = { enable = false },
 				indent = { enable = true },
 			})
 
