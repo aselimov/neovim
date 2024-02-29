@@ -425,6 +425,9 @@ require("lazy").setup({
 			local ensure_installed = vim.tbl_keys(servers or {})
 			vim.list_extend(ensure_installed, {
 				"stylua", -- Used to format lua code
+				"black",
+				"isort",
+				"clang-format",
 			})
 			require("mason-tool-installer").setup({ ensure_installed = ensure_installed })
 
@@ -458,8 +461,10 @@ require("lazy").setup({
 			formatters_by_ft = {
 				lua = { "stylua" },
 				-- Conform can also run multiple formatters sequentially
-				python = { "black" },
+				python = { "isort", "black" },
 				rust = { "rustfmt" },
+				cpp = { "clang-format" },
+				c = { "clang-format" },
 			},
 		},
 	},
