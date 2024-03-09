@@ -49,6 +49,7 @@ vim.opt.ts = 4
 vim.opt.expandtab = true
 vim.opt.tw = 100
 vim.opt.colorcolumn = "+1"
+vim.opt.termguicolors = true
 
 -- [[ Basic Keymaps ]]
 --  See `:help vim.keymap.set()`
@@ -157,6 +158,7 @@ require("lazy").setup({
 		end,
 	},
 	"kana/vim-textobj-user",
+	"christoomey/vim-tmux-navigator",
 	"godlygeek/tabular",
 	{
 		"Vigemus/iron.nvim",
@@ -570,7 +572,7 @@ require("lazy").setup({
 				ensure_installed = { "bash", "c", "html", "lua", "markdown", "vim", "vimdoc" },
 				-- Autoinstall languages that are not installed
 				auto_install = true,
-				highlight = { enable = true },
+				highlight = { enable = false },
 				indent = { enable = true },
 			})
 
@@ -583,3 +585,7 @@ require("lazy").setup({
 		end,
 	},
 })
+--Disable semantic highlights
+for _, group in ipairs(vim.fn.getcompletion("@lsp", "highlight")) do
+	vim.api.nvim_set_hl(0, group, {})
+end
