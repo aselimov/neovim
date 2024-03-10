@@ -50,7 +50,25 @@ vim.opt.expandtab = true
 vim.opt.tw = 100
 vim.opt.colorcolumn = "+1"
 vim.opt.termguicolors = true
+vim.opt.pumheight = 5
 
+-- Disable semantic tokens
+vim.api.nvim_create_autocmd("LspAttach", {
+	callback = function(args)
+		local client = vim.lsp.get_client_by_id(args.data.client_id)
+		client.server_capabilities.semanticTokensProvider = nil
+	end,
+})
+
+-- Function to get work count in status line
+local function getWords()
+	-- the third string here is the string for visual-block mode (^V)
+	if vim.fn.mode() == "v" or vim.fn.mode() == "V" or vim.fn.mode() == "" then
+		return vim.fn.wordcount().visual_words .. ""
+	else
+		return vim.fn.wordcount().words .. ""
+	end
+end
 -- [[ Basic Keymaps ]]
 --  See `:help vim.keymap.set()`
 
@@ -72,10 +90,27 @@ vim.keymap.set("n", "<C-h>", "<C-w><C-h>", { desc = "Move focus to the left wind
 vim.keymap.set("n", "<C-l>", "<C-w><C-l>", { desc = "Move focus to the right window" })
 vim.keymap.set("n", "<C-j>", "<C-w><C-j>", { desc = "Move focus to the lower window" })
 vim.keymap.set("n", "<C-k>", "<C-w><C-k>", { desc = "Move focus to the upper window" })
-
 -- [[ Basic Autocommands ]]
---  See :help lua-guide-autocommands
-
+--  Go back to last edited line when reopening file
+vim.api.nvim_create_autocmd("BufRead", {
+	callback = function(opts)
+		vim.api.nvim_create_autocmd("BufWinEnter", {
+			once = true,
+			buffer = opts.buf,
+			callback = function()
+				local ft = vim.bo[opts.buf].filetype
+				local last_known_line = vim.api.nvim_buf_get_mark(opts.buf, '"')[1]
+				if
+					not (ft:match("gitcommit") and ft:match("gitrebase"))
+					and last_known_line > 1
+					and last_known_line <= vim.api.nvim_buf_line_count(opts.buf)
+				then
+					vim.api.nvim_feedkeys([[g`"]], "nx", false)
+				end
+			end,
+		})
+	end,
+})
 -- [[ Install `lazy.nvim` plugin manager ]]
 --    See `:help lazy.nvim.txt` or https://github.com/folke/lazy.nvim for more info
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
@@ -157,9 +192,16 @@ require("lazy").setup({
 			npairs.remove_rule("`")
 		end,
 	},
-	"kana/vim-textobj-user",
 	"christoomey/vim-tmux-navigator",
+	"kana/vim-textobj-user",
+	{
+		"GCBallesteros/vim-textobj-hydrogen",
+		dependencies = {
+			"kana/vim-textobj-user",
+		},
+	},
 	"godlygeek/tabular",
+	"tpope/vim-sleuth",
 	{
 		"Vigemus/iron.nvim",
 		config = function()
@@ -200,8 +242,6 @@ require("lazy").setup({
 				},
 				ignore_blank_lines = true, -- ignore blank lines when sending visual select lines
 			})
-
-			-- iron also has a list of commands, see :h iron-commands for all available commands
 			vim.keymap.set("n", ";rs", "<cmd>IronRepl<cr>")
 			vim.keymap.set("n", ";rr", "<cmd>IronRestart<cr>")
 			vim.keymap.set("n", ";rf", "<cmd>IronFocus<cr>")
@@ -211,7 +251,7 @@ require("lazy").setup({
 		end,
 	},
 	"tpope/vim-markdown",
-
+	"christoomey/vim-tmux-navigator",
 	-- NOTE: Plugins can specify dependencies.
 	--
 	-- The dependencies are proper plugin specifications as well - anything
@@ -265,8 +305,19 @@ require("lazy").setup({
 			pcall(require("telescope").load_extension("live_grep_args"))
 			local builtin = require("telescope.builtin")
 			vim.keymap.set("n", "<C-g>", require("telescope").extensions.live_grep_args.live_grep_args)
-			vim.keymap.set("n", "<C-g>", require("telescope").extensions.live_grep_args.live_grep_args)
+			vim.keymap.set(
+				"x",
+				"<C-g>",
+				"\"zy:lua require('telescope').extensions.live_grep_args.live_grep_args(require('telescope.themes').get_ivy({}))<cr><c-r>z"
+			)
 			vim.keymap.set("n", "<C-f>", builtin.find_files)
+		end,
+	},
+	{ -- grammar checking
+		"rhysd/vim-grammarous",
+		ft = { "markdown", "latex" },
+		config = function()
+			vim.g["grammarous#jar_url"] = "https://www.languagetool.org/download/LanguageTool-5.9.zip"
 		end,
 	},
 	{ -- LSP Configuration & Plugins
@@ -305,7 +356,7 @@ require("lazy").setup({
 
 					-- Jump to the implementation of the word under your cursor.
 					--  Useful when your language has ways of declaring types without an actual implementation.
-					map("gI", require("telescope.builtin").lsp_implementations, "[G]oto [I]mplementation")
+					map("<leader>I", require("telescope.builtin").lsp_implementations, "[G]oto [I]mplementation")
 
 					-- Jump to the type of the word under your cursor.
 					--  Useful when you're not sure what type a variable is and you want to see
@@ -377,8 +428,14 @@ require("lazy").setup({
 			--  - settings (table): Override the default settings passed when initializing the server.
 			--        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
 			local servers = {
-				clangd = {},
+				clangd = {
+					filetypes = {
+						"c",
+						"cpp",
+					},
+				},
 				-- gopls = {},
+				hls = {},
 				jdtls = {},
 				pyright = {},
 				rust_analyzer = {
@@ -430,6 +487,7 @@ require("lazy").setup({
 				"black",
 				"isort",
 				"clang-format",
+				"ormolu",
 			})
 			require("mason-tool-installer").setup({ ensure_installed = ensure_installed })
 
@@ -467,6 +525,7 @@ require("lazy").setup({
 				rust = { "rustfmt" },
 				cpp = { "clang-format" },
 				c = { "clang-format" },
+				haskell = { "ormolu" },
 			},
 		},
 	},
@@ -487,6 +546,35 @@ require("lazy").setup({
 					end
 					return "make install_jsregexp"
 				end)(),
+				config = function()
+					require("luasnip.loaders.from_snipmate").lazy_load({ paths = "./snippets" })
+					local ls = require("luasnip")
+					-- some shorthands...
+					local snip = ls.snippet
+					local node = ls.snippet_node
+					local text = ls.text_node
+					local insert = ls.insert_node
+					local func = ls.function_node
+					local choice = ls.choice_node
+					local dynamicn = ls.dynamic_node
+
+					ls.add_snippets(nil, {
+						python = {
+							snip({
+								trig = "imp",
+								namr = "Imports",
+								dscr = "Comments for imports",
+							}, {
+								text({ "# Core modules", "" }),
+								insert(1),
+								text({ "", "# Non-core modules", "" }),
+								insert(2),
+								text({ "", "# SEI modules", "" }),
+								insert(3),
+							}),
+						},
+					})
+				end,
 			},
 			"saadparwaiz1/cmp_luasnip",
 			"hrsh7th/cmp-nvim-lsp",
@@ -520,10 +608,16 @@ require("lazy").setup({
 					--  This will expand snippets if the LSP sent a snippet.
 					["<C-y>"] = cmp.mapping.confirm({ select = true }),
 
-					-- Manually trigger a completion from nvim-cmp.
-					--  Generally you don't need this, because nvim-cmp will display
-					--  completions whenever it has completion options available.
-					["<C-Space>"] = cmp.mapping.complete({}),
+					["<leader>j"] = cmp.mapping(function()
+						if luasnip.expand_or_locally_jumpable() then
+							luasnip.expand_or_jump()
+						end
+					end, { "i", "s" }),
+					["<leader>k"] = cmp.mapping(function()
+						if luasnip.locally_jumpable(-1) then
+							luasnip.jump(-1)
+						end
+					end, { "i", "s" }),
 				}),
 				sources = {
 					{ name = "nvim_lsp" },
@@ -532,6 +626,15 @@ require("lazy").setup({
 				},
 			})
 		end,
+		snippet = {
+			expand = function(args)
+				local luasnip = require("luasnip")
+				if not luasnip then
+					return
+				end
+				luasnip.lsp_expand(args.body)
+			end,
+		},
 	},
 
 	{ -- You can easily change to a different colorscheme.
@@ -557,7 +660,31 @@ require("lazy").setup({
 		--  and try some other statusline plugin
 		"echasnovski/mini.nvim",
 		config = function()
-			require("mini.statusline").setup()
+			require("mini.statusline").setup({
+				content = {
+					active = function()
+						local mode, mode_hl = MiniStatusline.section_mode({ trunc_width = 120 })
+						local git = MiniStatusline.section_git({ trunc_width = 75 })
+						local diagnostics = MiniStatusline.section_diagnostics({ trunc_width = 75 })
+						local filename = MiniStatusline.section_filename({ trunc_width = 140 })
+						local fileinfo = MiniStatusline.section_fileinfo({ trunc_width = 120 })
+						local location = MiniStatusline.section_location({ trunc_width = 75 })
+						local search = MiniStatusline.section_searchcount({ trunc_width = 75 })
+						local words = getWords()
+						return MiniStatusline.combine_groups({
+
+							{ hl = mode_hl, strings = { mode } },
+							{ hl = "MiniStatuslineDevinfo", strings = { git, diagnostics } },
+							"%<", -- Mark general truncate point
+							{ hl = "MiniStatuslineFilename", strings = { filename } },
+							"%=", -- End left alignment
+							{ hl = "MiniStatuslineFileinfo", strings = { fileinfo } },
+							{ hl = "MiniStatuslineFileinfo", strings = { words } },
+							{ hl = mode_hl, strings = { search, location } },
+						})
+					end,
+				},
+			})
 		end,
 	},
 
