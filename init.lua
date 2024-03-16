@@ -14,9 +14,6 @@ vim.opt.mouse = ""
 -- Don't show the mode, since it's already in status line
 vim.opt.showmode = false
 
--- Enable break indent
-vim.opt.breakindent = true
-
 -- Case-insensitive searching UNLESS \C or capital in search
 vim.opt.ignorecase = true
 vim.opt.smartcase = true
@@ -204,6 +201,7 @@ require("lazy").setup({
 	"tpope/vim-sleuth",
 	{
 		"Vigemus/iron.nvim",
+		ft = { "python" },
 		config = function()
 			local iron = require("iron.core")
 			local view = require("iron.view")
@@ -227,13 +225,13 @@ require("lazy").setup({
 				-- Iron doesn't set keymaps by default anymore.
 				-- You can set them here or manually add keymaps to the functions in iron.core
 				keymaps = {
-					visual_send = ";sc",
-					send_file = ";sf",
-					send_line = ";sl",
-					cr = ";s<cr>",
-					interrupt = ";s<space>",
-					exit = ";sq",
-					clear = ";cl",
+					visual_send = "<leader>sc",
+					send_file = "<leader>sf",
+					send_line = "<leader>sl",
+					cr = "<leader>s<cr>",
+					interrupt = "<leader>s<space>",
+					exit = "<leader>sq",
+					clear = "<leader>cl",
 				},
 				-- If the highlight is on, you can change how it looks
 				-- For the available options, check nvim_set_hl
@@ -438,6 +436,7 @@ require("lazy").setup({
 				hls = {},
 				jdtls = {},
 				pyright = {},
+				bashls = { dependencies = "shellcheck" },
 				rust_analyzer = {
 					settings = {
 						files = {
@@ -488,6 +487,7 @@ require("lazy").setup({
 				"isort",
 				"clang-format",
 				"ormolu",
+				"beautysh",
 			})
 			require("mason-tool-installer").setup({ ensure_installed = ensure_installed })
 
