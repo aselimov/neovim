@@ -12,8 +12,10 @@ inoremap ;C \begin{columns}<Enter>\column{0.49\textwidth}<Enter>\column{0.49\tex
 inoremap ;ig \includegraphics[width=\textwidth]{<++>}<Esc>16hi
 inoremap ;li \begin{itemize}<Enter>\item<Enter>\end{itemize}<Esc>kA 
 inoremap ;le \begin{enumerate}<Enter>\item<Enter>\end{enumerate}<Esc>kA 
-inoremap ;ll \item<Space> 
+inoremap ;ll \item<Space>
 inoremap ;2t  \begin{table}[h!]<Enter>\begin{center}<Enter>\begin{tabular}{c c}<Enter> \toprule<Enter>\textbf{} & \textbf{<++>} \\<Enter>\midrule<Enter><++> & <++> \\<Enter>\bottomrule<Enter>\end{tabular}<Enter>\end{center}<Enter>\end{table}<Esc>6kf{a
 inoremap ;e \begin{equation}<Enter>\label{<++>}<Enter>\end{equation}<ESC>kO
 inoremap ;fw width=\textwidth<Esc>F\i
 inoremap ;fh height=\textheight<Esc>F\i
+
+set tw=5000

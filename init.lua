@@ -108,6 +108,7 @@ vim.api.nvim_create_autocmd("BufRead", {
 		})
 	end,
 })
+
 -- [[ Install `lazy.nvim` plugin manager ]]
 --    See `:help lazy.nvim.txt` or https://github.com/folke/lazy.nvim for more info
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
@@ -117,6 +118,13 @@ if not vim.loop.fs_stat(lazypath) then
 end ---@diagnostic disable-next-line: undefined-field
 vim.opt.rtp:prepend(lazypath)
 
+-- Get user dictionary
+local path = vim.fn.stdpath("config") .. "/spell/en.utf-8.add"
+local words = {}
+
+for word in io.open(path, "r"):lines() do
+	table.insert(words, word)
+end
 -- [[ Configure and install plugins ]]
 --
 --  To check the current status of your plugins, run
@@ -127,6 +135,8 @@ vim.opt.rtp:prepend(lazypath)
 --  To update plugins, you can run
 --    :Lazy update
 --
+--
+
 -- NOTE: Here is where you install your plugins.
 require("lazy").setup({
 
@@ -248,6 +258,7 @@ require("lazy").setup({
 			repl_open_cmd = "horizontal bot 20 split"
 		end,
 	},
+	"vigoux/ltex-ls.nvim",
 	"tpope/vim-markdown",
 	"christoomey/vim-tmux-navigator",
 	-- NOTE: Plugins can specify dependencies.
@@ -309,13 +320,6 @@ require("lazy").setup({
 				"\"zy:lua require('telescope').extensions.live_grep_args.live_grep_args(require('telescope.themes').get_ivy({}))<cr><c-r>z"
 			)
 			vim.keymap.set("n", "<C-f>", builtin.find_files)
-		end,
-	},
-	{ -- grammar checking
-		"rhysd/vim-grammarous",
-		ft = { "markdown", "latex" },
-		config = function()
-			vim.g["grammarous#jar_url"] = "https://www.languagetool.org/download/LanguageTool-5.9.zip"
 		end,
 	},
 	{ -- LSP Configuration & Plugins
@@ -433,8 +437,18 @@ require("lazy").setup({
 					},
 				},
 				-- gopls = {},
-				hls = {},
-				jdtls = {},
+				jdtls = {
+					filetypes = { "java" },
+					settings = {
+						java = {
+							format = {
+								settings = {
+									url = "~/RedTop.xml",
+								},
+							},
+						},
+					},
+				},
 				pyright = {},
 				bashls = { dependencies = "shellcheck" },
 				rust_analyzer = {
@@ -444,7 +458,44 @@ require("lazy").setup({
 						},
 					},
 				},
+				ltex = {
+					settings = {
+						ltex = {
+							enabled = { "latex", "tex", "bib", "markdown" },
+							language = "auto",
+							diagnosticSeverity = "information",
+							sentenceCacheSize = 2000,
+							latex = {
+								commands = {
+									["\\hypertarget"] = "dummy",
+								},
+							},
+							dictionary = (function()
+								-- For dictionary, search for files in the runtime to have
+								-- and include them as externals the format for them is
+								-- dict/{LANG}.txt
+								--
+								-- Also add dict/default.txt to all of them
+								local files = {}
+								for _, file in ipairs(vim.api.nvim_get_runtime_file("dict/*", true)) do
+									local lang = vim.fn.fnamemodify(file, ":t:r")
+									local fullpath = vim.fs.normalize(file, ":p")
+									files[lang] = { ":" .. fullpath }
+								end
 
+								if files.default then
+									for lang, _ in pairs(files) do
+										if lang ~= "default" then
+											vim.list_extend(files[lang], files.default)
+										end
+									end
+									files.default = nil
+								end
+								return files
+							end)(),
+						},
+					},
+				},
 				lua_ls = {
 					-- cmd = {...},
 					-- filetypes { ...},
@@ -484,10 +535,10 @@ require("lazy").setup({
 			vim.list_extend(ensure_installed, {
 				"stylua", -- Used to format lua code
 				"black",
-				"isort",
 				"clang-format",
 				"ormolu",
 				"beautysh",
+				"latexindent",
 			})
 			require("mason-tool-installer").setup({ ensure_installed = ensure_installed })
 
@@ -512,6 +563,14 @@ require("lazy").setup({
 
 	{ -- Autoformat
 		"stevearc/conform.nvim",
+		setup = {
+			formatters = {
+				black = {
+					command = "black",
+					prepend_args = { "--line-length", "100" },
+				},
+			},
+		},
 		opts = {
 			notify_on_error = false,
 			format_on_save = {
@@ -521,11 +580,12 @@ require("lazy").setup({
 			formatters_by_ft = {
 				lua = { "stylua" },
 				-- Conform can also run multiple formatters sequentially
-				python = { "isort", "black" },
+				python = { "black" },
 				rust = { "rustfmt" },
 				cpp = { "clang-format" },
 				c = { "clang-format" },
-				haskell = { "ormolu" },
+				sh = { "beautysh" },
+				tex = { "latexindent" },
 			},
 		},
 	},
@@ -571,6 +631,21 @@ require("lazy").setup({
 								insert(2),
 								text({ "", "# SEI modules", "" }),
 								insert(3),
+							}),
+						},
+						tex = {
+							snip({
+								trig = "input",
+								namr = "Input Cell",
+								dscr = "Cell for SEIInputTable",
+							}, {
+								text({ "\\hypertarget{" }),
+								insert(1),
+								text({ "}{" }),
+								insert(2),
+								text({ "} & \\SEICell{", "\t" }),
+								insert(3),
+								text({ "", "}\\\\", "" }),
 							}),
 						},
 					})
@@ -716,3 +791,40 @@ require("lazy").setup({
 for _, group in ipairs(vim.fn.getcompletion("@lsp", "highlight")) do
 	vim.api.nvim_set_hl(0, group, {})
 end
+
+--Testing scorch highlighting
+vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
+	pattern = "*.scorch",
+	callback = function()
+		vim.bo.filetype = "scorch"
+	end,
+})
+
+-- Commands to disable formatting
+require("conform").setup({
+	format_on_save = function(bufnr)
+		-- Disable with a global or buffer-local variable
+		if vim.g.disable_autoformat or vim.b[bufnr].disable_autoformat then
+			return
+		end
+		return { timeout_ms = 500, lsp_fallback = true }
+	end,
+})
+
+vim.api.nvim_create_user_command("FormatDisable", function(args)
+	if args.bang then
+		-- FormatDisable! will disable formatting just for this buffer
+		vim.b.disable_autoformat = true
+	else
+		vim.g.disable_autoformat = true
+	end
+end, {
+	desc = "Disable autoformat-on-save",
+	bang = true,
+})
+vim.api.nvim_create_user_command("FormatEnable", function()
+	vim.b.disable_autoformat = false
+	vim.g.disable_autoformat = false
+end, {
+	desc = "Re-enable autoformat-on-save",
+})
