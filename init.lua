@@ -258,15 +258,15 @@ require("lazy").setup({
 			repl_open_cmd = "horizontal bot 20 split"
 		end,
 	},
-	"vigoux/ltex-ls.nvim",
-	"tpope/vim-markdown",
+	"ixru/nvim-markdown",
+	"KeitaNakamura/tex-conceal.vim",
 	"christoomey/vim-tmux-navigator",
-	-- NOTE: Plugins can specify dependencies.
-	--
-	-- The dependencies are proper plugin specifications as well - anything
-	-- you do for a plugin at the top level, you can do for a dependency.
-	--
-	-- Use the `dependencies` key to specify the dependencies of a particular plugin
+	---- NOTE: Plugins can specify dependencies.
+	----
+	---- The dependencies are proper plugin specifications as well - anything
+	---- you do for a plugin at the top level, you can do for a dependency.
+	----
+	---- Use the `dependencies` key to specify the dependencies of a particular plugin
 
 	{ -- Fuzzy Finder (files, lsp, etc)
 		"nvim-telescope/telescope.nvim",
