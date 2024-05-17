@@ -87,6 +87,10 @@ vim.keymap.set("n", "<C-h>", "<C-w><C-h>", { desc = "Move focus to the left wind
 vim.keymap.set("n", "<C-l>", "<C-w><C-l>", { desc = "Move focus to the right window" })
 vim.keymap.set("n", "<C-j>", "<C-w><C-j>", { desc = "Move focus to the lower window" })
 vim.keymap.set("n", "<C-k>", "<C-w><C-k>", { desc = "Move focus to the upper window" })
+-- Jump to the definition of the word under your cursor.
+--  This is where a variable was first declared, or where a function is defined, etc.
+--  To jump back, press <C-T>.
+vim.keymap.set("n", "gd", vim.lsp.buf.definition, { desc = "" })
 -- [[ Basic Autocommands ]]
 --  Go back to last edited line when reopening file
 vim.api.nvim_create_autocmd("BufRead", {
@@ -261,6 +265,7 @@ require("lazy").setup({
 	"vigoux/ltex-ls.nvim",
 	"tpope/vim-markdown",
 	"christoomey/vim-tmux-navigator",
+	"skywind3000/asyncrun.vim",
 	-- NOTE: Plugins can specify dependencies.
 	--
 	-- The dependencies are proper plugin specifications as well - anything
@@ -347,11 +352,6 @@ require("lazy").setup({
 					local map = function(keys, func, desc)
 						vim.keymap.set("n", keys, func, { buffer = event.buf, desc = "LSP: " .. desc })
 					end
-
-					-- Jump to the definition of the word under your cursor.
-					--  This is where a variable was first declared, or where a function is defined, etc.
-					--  To jump back, press <C-T>.
-					map("gd", require("telescope.builtin").lsp_definitions, "[G]oto [D]efinition")
 
 					-- Find references for the word under your cursor.
 					map("gr", require("telescope.builtin").lsp_references, "[G]oto [R]eferences")
@@ -450,6 +450,7 @@ require("lazy").setup({
 					},
 				},
 				pyright = {},
+				fortls = {},
 				bashls = { dependencies = "shellcheck" },
 				rust_analyzer = {
 					settings = {
