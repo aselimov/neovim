@@ -11,6 +11,9 @@ map <C-b> : w % <Bar> AsyncRun md2pdf "%" <CR>
 map <A-p> : w % <Bar> AsyncRun md2beamer "%" <CR> 
 map <A-b> : w % <Bar> AsyncRun md2docx %  <CR>
 map <C-z> : !zathura %:r.pdf & <CR>
+inoremap ;b ****<esc>hi
+command Stab Tabularize /\s\+\zs\s/l1c0
+nnoremap ;t :Tabularize /\s\+\zs\s/l1c0<CR>
 set tw=1000
 set colorcolumn=
 

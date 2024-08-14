@@ -214,6 +214,14 @@ require("lazy").setup({
 	"godlygeek/tabular",
 	"tpope/vim-sleuth",
 	{
+		"codersauce/runst.nvim",
+		lazy = false,
+		opts = {},
+		config = function()
+			require("runst").setup()
+		end,
+	},
+	{
 		"Vigemus/iron.nvim",
 		ft = { "python" },
 		config = function()
@@ -328,6 +336,9 @@ require("lazy").setup({
 	},
 	{ -- LSP Configuration & Plugins
 		"neovim/nvim-lspconfig",
+		opts = {
+			autoformat = false,
+		},
 		dependencies = {
 			-- Automatically install LSPs and related tools to stdpath for neovim
 			"williamboman/mason.nvim",
@@ -435,6 +446,7 @@ require("lazy").setup({
 						"cpp",
 					},
 				},
+				yamlls = {},
 				-- gopls = {},
 				jdtls = {
 					filetypes = { "java" },
@@ -453,8 +465,13 @@ require("lazy").setup({
 				bashls = { dependencies = "shellcheck" },
 				rust_analyzer = {
 					settings = {
-						files = {
-							excludeDirs = { "$HOME", "$HOME/.cargo/**", "$HOME/.rustup/**" },
+						["rust-analyzer"] = {
+							check = {
+								command = "clippy",
+							},
+							rustfmt = {
+								extraArgs = { "+nightly" },
+							},
 						},
 					},
 				},
@@ -539,6 +556,7 @@ require("lazy").setup({
 				"ormolu",
 				"beautysh",
 				"latexindent",
+				"prettier",
 			})
 			require("mason-tool-installer").setup({ ensure_installed = ensure_installed })
 
@@ -548,6 +566,9 @@ require("lazy").setup({
 						local server = servers[server_name] or {}
 						require("lspconfig")[server_name].setup({
 							cmd = server.cmd,
+							on_init = function(client)
+								client.offset_encoding = "utf-8"
+							end,
 							settings = server.settings,
 							filetypes = server.filetypes,
 							-- This handles overriding only values explicitly passed
@@ -575,17 +596,17 @@ require("lazy").setup({
 			notify_on_error = false,
 			format_on_save = {
 				timeout_ms = 500,
-				lsp_fallback = true,
+				lsp_fallback = false,
 			},
 			formatters_by_ft = {
 				lua = { "stylua" },
 				-- Conform can also run multiple formatters sequentially
 				python = { "black" },
-				rust = { "rustfmt" },
 				cpp = { "clang-format" },
 				c = { "clang-format" },
 				sh = { "beautysh" },
 				tex = { "latexindent" },
+				yaml = { "prettier" },
 			},
 		},
 	},
@@ -646,6 +667,19 @@ require("lazy").setup({
 								text({ "} & \\SEICell{", "\t" }),
 								insert(3),
 								text({ "", "}\\\\", "" }),
+							}),
+						},
+						markdown = {
+							snip({
+								trig = "img",
+								namr = "image",
+								dscr = "Markdown img",
+							}, {
+								text({ "![" }),
+								insert(1),
+								text("]("),
+								insert(2),
+								text(")"),
 							}),
 						},
 					})
@@ -775,7 +809,7 @@ require("lazy").setup({
 				-- Autoinstall languages that are not installed
 				auto_install = true,
 				highlight = { enable = false },
-				indent = { enable = true },
+				indent = { enable = false },
 			})
 
 			-- There are additional nvim-treesitter modules that you can use to interact
@@ -786,7 +820,10 @@ require("lazy").setup({
 			--    - Treesitter + textobjects: https://github.com/nvim-treesitter/nvim-treesitter-textobjects
 		end,
 	},
+	"airblade/vim-gitgutter",
 })
+--Set rustfmt command
+vim.g["rustfmt_command"] = "rustfmt +nightly"
 --Disable semantic highlights
 for _, group in ipairs(vim.fn.getcompletion("@lsp", "highlight")) do
 	vim.api.nvim_set_hl(0, group, {})
