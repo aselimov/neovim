@@ -446,6 +446,7 @@ require("lazy").setup({
 						"cpp",
 					},
 				},
+				taplo = {},
 				yamlls = {},
 				-- gopls = {},
 				jdtls = {
@@ -475,6 +476,7 @@ require("lazy").setup({
 						},
 					},
 				},
+				arduino_language_server = {},
 				ltex = {
 					settings = {
 						ltex = {
@@ -681,6 +683,20 @@ require("lazy").setup({
 								insert(2),
 								text(")"),
 							}),
+							snip({
+								trig = "header",
+								namr = "header",
+								dscr = "Yaml header for markdown notes",
+							}, {
+								text({ "---", "" }),
+								text("title: "),
+								insert(1),
+								text({ "", "author: Alex Selimov", "" }),
+								text("tags: ["),
+								insert(2),
+								text({ "]", "", "" }),
+								text({ "---", "" }),
+							}),
 						},
 					})
 				end,
@@ -836,7 +852,14 @@ vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
 		vim.bo.filetype = "scorch"
 	end,
 })
-
+--
+--Testing scorch highlighting
+vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
+	pattern = "*.sep",
+	callback = function()
+		vim.bo.filetype = "sep"
+	end,
+})
 -- Commands to disable formatting
 require("conform").setup({
 	format_on_save = function(bufnr)
