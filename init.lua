@@ -205,6 +205,7 @@ require("lazy").setup({
 	},
 	"christoomey/vim-tmux-navigator",
 	"kana/vim-textobj-user",
+	"mechatroner/rainbow_csv",
 	{
 		"GCBallesteros/vim-textobj-hydrogen",
 		dependencies = {
