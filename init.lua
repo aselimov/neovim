@@ -556,7 +556,6 @@ require("lazy").setup({
 				"stylua", -- Used to format lua code
 				"black",
 				"clang-format",
-				"ormolu",
 				"beautysh",
 				"latexindent",
 				"prettier",
@@ -768,12 +767,14 @@ require("lazy").setup({
 		-- change the command in the config to whatever the name of that colorscheme is
 		--
 		-- If you want to see what colorschemes are already installed, you can use `:Telescope colorscheme`
-		"morhetz/gruvbox",
 		lazy = false, -- make sure we load this during startup if it is your main colorscheme
 		priority = 1000, -- make sure to load this before all the other start plugins
+		--"morhetz/gruvbox",
+		"zenbones-theme/zenbones.nvim",
+		dependencies = "rktjmp/lush.nvim",
 		config = function()
 			-- Load the colorscheme here
-			vim.cmd.colorscheme("gruvbox")
+			vim.cmd.colorscheme("zenbones")
 		end,
 	},
 
