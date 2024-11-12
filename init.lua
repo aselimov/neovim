@@ -271,6 +271,7 @@ require("lazy").setup({
 			repl_open_cmd = "horizontal bot 20 split"
 		end,
 	},
+	"norcalli/nvim-colorizer.lua",
 	"ixru/nvim-markdown",
 	"KeitaNakamura/tex-conceal.vim",
 	"christoomey/vim-tmux-navigator",
@@ -774,7 +775,7 @@ require("lazy").setup({
 		dependencies = "rktjmp/lush.nvim",
 		config = function()
 			-- Load the colorscheme here
-			vim.cmd.colorscheme("zenbones")
+			vim.cmd.colorscheme("zenwritten")
 		end,
 	},
 
@@ -840,6 +841,8 @@ require("lazy").setup({
 	},
 	"airblade/vim-gitgutter",
 })
+
+require("colorizer").setup()
 --Set rustfmt command
 vim.g["rustfmt_command"] = "rustfmt +nightly"
 --Disable semantic highlights
