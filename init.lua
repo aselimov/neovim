@@ -893,3 +893,12 @@ vim.api.nvim_create_user_command("FormatEnable", function()
 end, {
 	desc = "Re-enable autoformat-on-save",
 })
+
+function file_exists(name)
+	local f = io.open(name, "r")
+	return f ~= nil and io.close(f)
+end
+
+if file_exists("/home/aselimov/.config/.stlight") then
+	vim.opt.background = "light"
+end
