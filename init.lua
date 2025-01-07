@@ -838,6 +838,12 @@ require("lazy").setup({
 			--    - Treesitter + textobjects: https://github.com/nvim-treesitter/nvim-treesitter-textobjects
 		end,
 	},
+	{
+		"https://git.sr.ht/~whynothugo/lsp_lines.nvim",
+		setup = { vim.diagnostic.config({
+			virtual_text = false,
+		}) },
+	},
 	"airblade/vim-gitgutter",
 	"tpope/vim-abolish",
 	{
