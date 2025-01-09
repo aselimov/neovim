@@ -261,7 +261,7 @@ require("lazy").setup({
 				highlight = {
 					italic = true,
 				},
-				ignore_blank_lines = true, -- ignore blank lines when sending visual select lines
+				ignore_blank_lines = false, -- ignore blank lines when sending visual select lines
 			})
 			vim.keymap.set("n", ";rs", "<cmd>IronRepl<cr>")
 			vim.keymap.set("n", ";rr", "<cmd>IronRestart<cr>")
