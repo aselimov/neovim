@@ -762,7 +762,6 @@ require("lazy").setup({
 			end,
 		},
 	},
-
 	{ -- You can easily change to a different colorscheme.
 		-- Change the name of the colorscheme plugin below, and then
 		-- change the command in the config to whatever the name of that colorscheme is
@@ -839,10 +838,26 @@ require("lazy").setup({
 		end,
 	},
 	{
-		"https://git.sr.ht/~whynothugo/lsp_lines.nvim",
-		setup = { vim.diagnostic.config({
-			virtual_text = false,
-		}) },
+		"folke/snacks.nvim",
+		priority = 1000,
+		lazy = false,
+		opts = {
+			-- your configuration comes here
+			-- or leave it empty to use the default settings
+			-- refer to the configuration section below
+			dashboard = { enabled = true },
+			input = { enabled = true },
+			terminal = { enabled = true },
+		},
+		keys = {
+			{
+				"<leader>T",
+				function()
+					Snacks.terminal()
+				end,
+				desc = "Toggle Terminal",
+			},
+		},
 	},
 	"airblade/vim-gitgutter",
 	"tpope/vim-abolish",
