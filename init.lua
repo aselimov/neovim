@@ -970,6 +970,7 @@ function file_exists(name)
 	return f ~= nil and io.close(f)
 end
 
-if file_exists("/home/aselimov/.config/.stlight") then
+local home = os.getenv("HOME")
+if file_exists(home .. "/.config/nvim/light_mode") then
 	vim.opt.background = "light"
 end
