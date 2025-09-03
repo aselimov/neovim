@@ -13,6 +13,7 @@ return {
 	{
 		"Exafunction/windsurf.vim",
 		event = "BufEnter",
+		cond = os.getenv("NVIM_USE_WINDSURF") == "true",
 	},
 
 	{
