@@ -13,8 +13,31 @@ return {
 			-- Path to your exported Eclipse/IntelliJ style xml
 			local style_path = vim.fn.expand("~/.config/nvim/GoogleStyle.xml")
 
+			local java_home = os.getenv("NVIM_JDTLS_JAVA_HOME")
+
 			local config = {
-				cmd = { "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java", "-Declipse.application=org.eclipse.jdt.ls.core.id1", "-Dosgi.bundles.defaultStartLevel=4", "-Declipse.product=org.eclipse.jdt.ls.core.product", "-Dlog.protocol=true", "-Dlog.level=ALL", "-Xms1g", "--add-modules=ALL-SYSTEM", "--add-opens", "java.base/java.util=ALL-UNNAMED", "--add-opens", "java.base/java.lang=ALL-UNNAMED", "-jar", vim.fn.glob(vim.fn.stdpath("data") .. "/mason/packages/jdtls/plugins/org.eclipse.equinox.launcher_*.jar"), "-configuration", vim.fn.glob(vim.fn.stdpath("data") .. "/mason/packages/jdtls/config_mac"), "-data", vim.fn.expand("~/.cache/jdtls-workspace/") .. "/" .. root_dir:gsub(":", "_") },
+				cmd = {
+					java_home .. "/bin/java",
+					"-Declipse.application=org.eclipse.jdt.ls.core.id1",
+					"-Dosgi.bundles.defaultStartLevel=4",
+					"-Declipse.product=org.eclipse.jdt.ls.core.product",
+					"-Dlog.protocol=true",
+					"-Dlog.level=ALL",
+					"-Xms1g",
+					"--add-modules=ALL-SYSTEM",
+					"--add-opens",
+					"java.base/java.util=ALL-UNNAMED",
+					"--add-opens",
+					"java.base/java.lang=ALL-UNNAMED",
+					"-jar",
+					vim.fn.glob(
+						vim.fn.stdpath("data") .. "/mason/packages/jdtls/plugins/org.eclipse.equinox.launcher_*.jar"
+					),
+					"-configuration",
+					vim.fn.glob(vim.fn.stdpath("data") .. "/mason/packages/jdtls/config_mac"),
+					"-data",
+					vim.fn.expand("~/.cache/jdtls-workspace/") .. "/" .. root_dir:gsub(":", "_"),
+				},
 				root_dir = root_dir,
 				settings = {
 					java = {
