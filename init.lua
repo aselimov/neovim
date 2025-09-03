@@ -336,6 +336,36 @@ require("lazy").setup({
 			vim.keymap.set("n", "<C-f>", builtin.find_files)
 		end,
 	},
+	{
+		"mfussenegger/nvim-jdtls",
+		config = function()
+			local jdtls = require("jdtls")
+
+			-- Find project root
+			local root_dir = require("jdtls.setup").find_root({ ".git", "mvnw", "gradlew" })
+
+			-- Path to your exported Eclipse/IntelliJ style xml
+			local style_path = vim.fn.expand("~/.config/nvim/GoogleStyle.xml")
+
+			local config = {
+				cmd = { "jdtls" }, -- or path to your startup script
+				root_dir = root_dir,
+				settings = {
+					java = {
+						format = {
+							settings = {
+								url = "file://" .. style_path,
+								profile = "GoogleStyle", -- must match the profile inside the xml
+							},
+						},
+					},
+				},
+			}
+
+			jdtls.start_or_attach(config)
+		end,
+	},
+
 	{ -- LSP Configuration & Plugins
 		"neovim/nvim-lspconfig",
 		opts = {
@@ -449,23 +479,14 @@ require("lazy").setup({
 					},
 				},
 				taplo = {},
-				yamlls = {},
+				yamlls = { settings = { yaml = { format = { enable = false } } } },
 				-- gopls = {},
-				jdtls = {
-					filetypes = { "java" },
-					settings = {
-						java = {
-							format = {
-								settings = {
-									url = "~/RedTop.xml",
-								},
-							},
-						},
-					},
-				},
 				pyright = {},
 				fortls = {},
+				jsonls = {},
 				bashls = { dependencies = "shellcheck" },
+				kotlin_language_server = {},
+				ts_ls = {},
 				rust_analyzer = {
 					settings = {
 						["rust-analyzer"] = {
@@ -785,7 +806,17 @@ require("lazy").setup({
 		--  You could remove this setup call if you don't like it,
 		--  and try some other statusline plugin
 		"echasnovski/mini.nvim",
+		keys = {
+			{
+				"<leader>m",
+				function()
+					require("mini.files").open(vim.api.nvim_buf_get_name(0), true)
+				end,
+				desc = "Open mini.files (Directory of Current File)",
+			},
+		},
 		config = function()
+			require("mini.files").setup()
 			require("mini.statusline").setup({
 				content = {
 					active = function()
@@ -848,6 +879,7 @@ require("lazy").setup({
 			dashboard = { enabled = true },
 			input = { enabled = true },
 			terminal = { enabled = true },
+			notify = { enabled = true },
 		},
 		keys = {
 			{
@@ -874,6 +906,15 @@ require("lazy").setup({
 		version = "*",
 	},
 	"dhruvasagar/vim-table-mode",
+	{
+		"MeanderingProgrammer/render-markdown.nvim",
+		dependencies = { "nvim-treesitter/nvim-treesitter", "echasnovski/mini.nvim" }, -- if you use the mini.nvim suite
+		-- dependencies = { 'nvim-treesitter/nvim-treesitter', 'echasnovski/mini.icons' }, -- if you use standalone mini plugins
+		-- dependencies = { 'nvim-treesitter/nvim-treesitter', 'nvim-tree/nvim-web-devicons' }, -- if you prefer nvim-web-devicons
+		---@module 'render-markdown'
+		---@type render.md.UserConfig
+		opts = {},
+	},
 	{
 		"folke/trouble.nvim",
 		opts = {}, -- for default options, refer to the configuration section for custom setup.
@@ -921,21 +962,6 @@ for _, group in ipairs(vim.fn.getcompletion("@lsp", "highlight")) do
 	vim.api.nvim_set_hl(0, group, {})
 end
 
---Testing scorch highlighting
-vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
-	pattern = "*.scorch",
-	callback = function()
-		vim.bo.filetype = "scorch"
-	end,
-})
---
---Testing scorch highlighting
-vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
-	pattern = "*.sep",
-	callback = function()
-		vim.bo.filetype = "sep"
-	end,
-})
 -- Commands to disable formatting
 require("conform").setup({
 	format_on_save = function(bufnr)
@@ -974,3 +1000,11 @@ local home = os.getenv("HOME")
 if file_exists(home .. "/.config/nvim/light_mode") then
 	vim.opt.background = "light"
 end
+
+-- Autocommand for java to organize imports on save
+--vim.api.nvim_create_autocmd("BufWritePost", {
+--	pattern = "*.java",
+--	callback = function()
+--		require("jdtls").organize_imports()
+--	end,
+--})
