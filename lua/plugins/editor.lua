@@ -13,7 +13,7 @@ return {
 	"godlygeek/tabular",
 	"tpope/vim-sleuth",
 	"norcalli/nvim-colorizer.lua",
-	"ixru/nvim-markdown",
+	{ "ixru/nvim-markdown", ft = "markdown" },
 	"KeitaNakamura/tex-conceal.vim",
 	"skywind3000/asyncrun.vim",
 	"airblade/vim-gitgutter",
