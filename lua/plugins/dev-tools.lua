@@ -10,7 +10,10 @@ return {
 		end,
 	},
 
-	{ "cdelledonne/vim-cmake" },
+	{
+		"cdelledonne/vim-cmake",
+		cond = vim.fn.executable("cmake") == 1,
+	},
 
 	{
 		"Exafunction/windsurf.vim",
