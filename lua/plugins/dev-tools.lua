@@ -10,6 +10,8 @@ return {
 		end,
 	},
 
+	{ "cdelledonne/vim-cmake" },
+
 	{
 		"Exafunction/windsurf.vim",
 		event = "BufEnter",
@@ -29,3 +31,4 @@ return {
 		version = "*",
 	},
 }
+
