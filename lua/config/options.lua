@@ -42,14 +42,3 @@ vim.opt.tw = 100
 vim.opt.colorcolumn = "+1"
 vim.opt.termguicolors = true
 vim.opt.pumheight = 5
-
--- Light mode check
-local function file_exists(name)
-	local f = io.open(name, "r")
-	return f ~= nil and io.close(f)
-end
-
-local home = os.getenv("HOME")
-if file_exists(home .. "/.config/nvim/light_mode") then
-	vim.opt.background = "light"
-end

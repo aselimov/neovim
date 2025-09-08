@@ -16,6 +16,13 @@ return {
 	},
 
 	{
+		"f-person/git-blame.nvim",
+		opts = {
+			enabled = false,
+		},
+	},
+
+	{
 		"Exafunction/windsurf.vim",
 		event = "BufEnter",
 		cond = os.getenv("NVIM_USE_WINDSURF") == "true",
@@ -34,4 +41,3 @@ return {
 		version = "*",
 	},
 }
-

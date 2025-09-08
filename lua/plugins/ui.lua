@@ -8,6 +8,10 @@ return {
 		dependencies = "rktjmp/lush.nvim",
 		config = function()
 			vim.cmd.colorscheme("zenwritten")
+			local term_bg = os.getenv("TERM_BACKGROUND")
+			if term_bg == "light" then
+				vim.opt.background = "light"
+			end
 		end,
 	},
 
