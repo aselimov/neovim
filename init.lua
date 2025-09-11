@@ -1,3 +1,6 @@
+-- set to true for light mode
+vim.g.light_mode = true
+
 -- Neovim configuration
 -- Modularized structure for better organization
 

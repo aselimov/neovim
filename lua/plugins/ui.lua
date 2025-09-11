@@ -7,11 +7,10 @@ return {
 		priority = 1000,
 		dependencies = "rktjmp/lush.nvim",
 		config = function()
-			vim.cmd.colorscheme("zenwritten")
-			local term_bg = os.getenv("TERM_BACKGROUND")
-			if term_bg == "light" then
-				vim.opt.background = "light"
+			if vim.g.light_mode then
+				vim.o.background = "light"
 			end
+			vim.cmd.colorscheme("zenbones")
 		end,
 	},
 
