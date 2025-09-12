@@ -9,6 +9,8 @@ return {
 		config = function()
 			if vim.g.light_mode then
 				vim.o.background = "light"
+			else
+				vim.o.background = "dark"
 			end
 			vim.cmd.colorscheme("zenbones")
 		end,

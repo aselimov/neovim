@@ -19,3 +19,6 @@ require("lazy").setup({
 -- Load additional configuration
 require("colorizer").setup()
 require("config.formatting")
+
+-- Add configuration to listen so we can live reload
+pcall(vim.fn.serverstart, vim.fn.stdpath("run") .. "/nvim-" .. vim.fn.getpid())
