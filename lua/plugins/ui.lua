@@ -12,7 +12,7 @@ return {
 			else
 				vim.o.background = "dark"
 			end
-			vim.cmd.colorscheme("zenbones")
+			vim.cmd.colorscheme("zenwritten")
 		end,
 	},
 
