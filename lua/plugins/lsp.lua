@@ -111,10 +111,11 @@ return {
 					filetypes = {
 						"c",
 						"cpp",
+						"cuda",
 					},
 				},
 				taplo = {},
-				yamlls = { settings = { yaml = { format = { enable = false } } } },
+				yamlls = { settings = { yaml = { format = { enable = true } } } },
 				pyright = {},
 				fortls = {},
 				jsonls = {},
