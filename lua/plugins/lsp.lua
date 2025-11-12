@@ -121,19 +121,9 @@ return {
 				jsonls = {},
 				bashls = { dependencies = "shellcheck" },
 				kotlin_language_server = {},
+				gopls = {},
 				ts_ls = {},
-				rust_analyzer = {
-					settings = {
-						["rust-analyzer"] = {
-							check = {
-								command = "clippy",
-							},
-							rustfmt = {
-								extraArgs = { "+nightly" },
-							},
-						},
-					},
-				},
+				svelte = {},
 				arduino_language_server = {},
 				ltex = {
 					settings = {
