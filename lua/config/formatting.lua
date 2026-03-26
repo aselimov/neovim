@@ -1,8 +1,5 @@
 -- Formatting configuration
 
--- Set rustfmt command
-vim.g["rustfmt_command"] = "rustfmt +nightly"
-
 -- Commands to disable/enable formatting
 require("conform").setup({
 	format_on_save = function(bufnr)
@@ -32,3 +29,4 @@ vim.api.nvim_create_user_command("FormatEnable", function()
 end, {
 	desc = "Re-enable autoformat-on-save",
 })
+

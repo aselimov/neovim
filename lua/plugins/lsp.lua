@@ -181,6 +181,7 @@ return {
 				"jdtls",
 				"stylua",
 				"black",
+				"golines",
 				"clang-format",
 				"beautysh",
 				"latexindent",
