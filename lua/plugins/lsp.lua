@@ -11,7 +11,7 @@ return {
 			local root_dir = require("jdtls.setup").find_root({ ".git", "mvnw", "gradlew" })
 
 			-- Path to your exported Eclipse/IntelliJ style xml
-			local style_path = vim.fn.expand("~/.config/nvim/GoogleStyle.xml")
+			local style_path = vim.fn.expand("~/.config/nvim/formatters/eclipse-java-google-style.xml")
 
 			local java_home = os.getenv("NVIM_JDTLS_JAVA_HOME")
 
@@ -42,10 +42,7 @@ return {
 				settings = {
 					java = {
 						format = {
-							settings = {
-								url = "file://" .. style_path,
-								profile = "GoogleStyle", -- must match the profile inside the xml
-							},
+							enabled = false,
 						},
 					},
 				},

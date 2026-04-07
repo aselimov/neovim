@@ -12,7 +12,7 @@ return {
 	},
 	"godlygeek/tabular",
 	"tpope/vim-sleuth",
-	"norcalli/nvim-colorizer.lua",
+	"catgoose/nvim-colorizer.lua",
 	{ "ixru/nvim-markdown", ft = "markdown" },
 	"KeitaNakamura/tex-conceal.vim",
 	"skywind3000/asyncrun.vim",
@@ -20,3 +20,4 @@ return {
 	"tpope/vim-abolish",
 	"dhruvasagar/vim-table-mode",
 }
+

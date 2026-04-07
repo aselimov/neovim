@@ -25,6 +25,7 @@ return {
 		"f-person/git-blame.nvim",
 		opts = {
 			enabled = false,
+			message_template = "<<sha>> • <author> • <summary> • <date>",
 		},
 	},
 
