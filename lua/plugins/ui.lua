@@ -62,16 +62,21 @@ return {
 
 	{
 		"nvim-treesitter/nvim-treesitter",
-		branch = "master",
-		tag = "v0.9.3",
+		branch = "main",
+		main = "nvim-treesitter",
 		build = ":TSUpdate",
-		config = function()
-			require("nvim-treesitter.configs").setup({
-				ensure_installed = { "bash", "c", "html", "lua", "markdown", "vim", "vimdoc" },
-				auto_install = true,
-				highlight = { enable = false },
-				indent = { enable = false },
-			})
+		init = function()
+			-- Install parsers that aren't already present
+			local ensure_installed = { "bash", "c", "html", "lua", "markdown", "vim", "vimdoc" }
+			local already_installed = require("nvim-treesitter.config").get_installed()
+			local to_install = vim.iter(ensure_installed)
+				:filter(function(parser)
+					return not vim.tbl_contains(already_installed, parser)
+				end)
+				:totable()
+			if #to_install > 0 then
+				require("nvim-treesitter").install(to_install)
+			end
 		end,
 	},
 
