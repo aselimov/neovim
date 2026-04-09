@@ -3,11 +3,18 @@
 return {
 	"nvim-telescope/telescope.nvim",
 	event = "VeryLazy",
-	branch = "0.1.x",
+	branch = "master",
 	dependencies = {
 		"nvim-lua/plenary.nvim",
 		{ "nvim-tree/nvim-web-devicons" },
 		{ "nvim-telescope/telescope-live-grep-args.nvim" },
+		{
+			"nvim-telescope/telescope-fzf-native.nvim",
+			build = "make",
+			cond = function()
+				return vim.fn.executable("make") == 1
+			end,
+		},
 	},
 	config = function()
 		require("telescope").setup({
